@@ -1,5 +1,7 @@
 package ipss.group1.practicas.controllers.mantainer;
 
+import ipss.group1.practicas.controllers.response.ResponseFormat;
+import ipss.group1.practicas.controllers.response.ResponseFormatLists;
 import ipss.group1.practicas.services.dtos.TutorDTO;
 import ipss.group1.practicas.models.Tutor;
 import ipss.group1.practicas.services.TutorService;
@@ -18,30 +20,42 @@ public class TutorController {
     }
 
     @GetMapping
-    public List<TutorDTO> getAllTutores() {
-        return tutorService.getAllTutores();
+    public ResponseEntity<ResponseFormatLists> getAllTutores() {
+        return ResponseEntity.ok().body(
+                ResponseFormatLists.ResponseFormatListsBuilder.aResponseFormatLists()
+                        .withData(tutorService.getAllTutores())
+                        .withMessage("Listado Tutores").build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TutorDTO> getTutorById(@PathVariable Long id) {
+    public ResponseEntity<ResponseFormat> getTutorById(@PathVariable Long id) {
         TutorDTO tutorDTO = tutorService.getTutorById(id);
         if (tutorDTO != null) {
-            return ResponseEntity.ok(tutorDTO);
+            return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                    .withData(tutorDTO)
+                    .withMessage("Tutor encontrado")
+                    .build());
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public TutorDTO createTutor(@RequestBody Tutor tutor) {
-        return tutorService.createTutor(tutor);
+    public ResponseEntity<ResponseFormat> createTutor(@RequestBody Tutor tutor) {
+        return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                .withData(tutorService.createTutor(tutor))
+                .withMessage("Tutor creado")
+                .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TutorDTO> updateTutor(@PathVariable Long id, @RequestBody Tutor tutor) {
+    public ResponseEntity<ResponseFormat> updateTutor(@PathVariable Long id, @RequestBody Tutor tutor) {
         TutorDTO tutorDTO = tutorService.updateTutor(id, tutor);
         if (tutorDTO != null) {
-            return ResponseEntity.ok(tutorDTO);
+            return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                    .withData(tutorDTO)
+                    .withMessage("Tutor actualizado")
+                    .build());
         } else {
             return ResponseEntity.notFound().build();
         }

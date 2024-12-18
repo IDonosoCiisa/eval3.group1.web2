@@ -1,5 +1,7 @@
 package ipss.group1.practicas.controllers;
 
+import ipss.group1.practicas.controllers.response.ResponseFormat;
+import ipss.group1.practicas.controllers.response.ResponseFormatLists;
 import ipss.group1.practicas.services.dtos.PracticaDTO;
 import ipss.group1.practicas.services.usecases.EstudianteUseCase;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +19,18 @@ public class EstudianteUseCaseController {
     }
 
     @GetMapping("/{estudianteId}/practicas")
-    public List<PracticaDTO> getPracticasByEstudianteId(@PathVariable Long estudianteId) {
-        return estudianteUseCase.getPracticasByEstudianteId(estudianteId);
+    public ResponseEntity<ResponseFormatLists> getPracticasByEstudianteId(@PathVariable Long estudianteId) {
+        return ResponseEntity.ok().body(
+                ResponseFormatLists.ResponseFormatListsBuilder.aResponseFormatLists()
+                        .withData(estudianteUseCase.getPracticasByEstudianteId(estudianteId))
+                        .withMessage("Listado prácticas para id: " + estudianteId).build());
     }
 
     @PostMapping("/{estudianteId}/practicas")
-    public ResponseEntity<PracticaDTO> createPractica(@PathVariable Long estudianteId, @RequestBody PracticaDTO practicaDTO) {
-        PracticaDTO createdPractica = estudianteUseCase.createPractica(practicaDTO, estudianteId);
-        return ResponseEntity.ok(createdPractica);
+    public ResponseEntity<ResponseFormat> createPractica(@PathVariable Long estudianteId, @RequestBody PracticaDTO practicaDTO) {
+        return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                .withData( estudianteUseCase.createPractica(practicaDTO, estudianteId))
+                .withMessage("Estudiante creado")
+                .build());
     }
 }

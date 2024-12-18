@@ -1,5 +1,7 @@
 package ipss.group1.practicas.controllers.mantainer;
 
+import ipss.group1.practicas.controllers.response.ResponseFormat;
+import ipss.group1.practicas.controllers.response.ResponseFormatLists;
 import ipss.group1.practicas.services.dtos.PracticaDTO;
 import ipss.group1.practicas.models.Practica;
 import ipss.group1.practicas.services.PracticaService;
@@ -18,30 +20,42 @@ public class PracticaController {
     }
 
     @GetMapping
-    public List<PracticaDTO> getAllPracticas() {
-        return practicaService.getAllPracticas();
+    public ResponseEntity<ResponseFormatLists> getAllPracticas() {
+        return ResponseEntity.ok().body(
+                ResponseFormatLists.ResponseFormatListsBuilder.aResponseFormatLists()
+                        .withData(practicaService.getAllPracticas())
+                        .withMessage("Listado de Prácticas").build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PracticaDTO> getPracticaById(@PathVariable Long id) {
+    public ResponseEntity<ResponseFormat> getPracticaById(@PathVariable Long id) {
         PracticaDTO practicaDTO = practicaService.getPracticaById(id);
         if (practicaDTO != null) {
-            return ResponseEntity.ok(practicaDTO);
+            return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                    .withData(practicaDTO)
+                    .withMessage("Práctica encontrada")
+                    .build());
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public PracticaDTO createPractica(@RequestBody Practica practica) {
-        return practicaService.createPractica(practica);
+    public  ResponseEntity<ResponseFormat> createPractica(@RequestBody Practica practica) {
+        return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                .withData(practicaService.createPractica(practica))
+                .withMessage("Práctica creada")
+                .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PracticaDTO> updatePractica(@PathVariable Long id, @RequestBody Practica practica) {
+    public ResponseEntity<ResponseFormat> updatePractica(@PathVariable Long id, @RequestBody Practica practica) {
         PracticaDTO practicaDTO = practicaService.updatePractica(id, practica);
         if (practicaDTO != null) {
-            return ResponseEntity.ok(practicaDTO);
+            return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
+                    .withData(practicaDTO)
+                    .withMessage("Práctica actualizada")
+                    .build());
         } else {
             return ResponseEntity.notFound().build();
         }
