@@ -7,8 +7,6 @@ import ipss.group1.practicas.services.usecases.EstudianteUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/estudiantes")
 public class EstudianteUseCaseController {
@@ -30,7 +28,7 @@ public class EstudianteUseCaseController {
     public ResponseEntity<ResponseFormat> createPractica(@PathVariable Long estudianteId, @RequestBody PracticaDTO practicaDTO) {
         return ResponseEntity.ok(ResponseFormat.ResponseFormatBuilder.aResponseFormat()
                 .withData( estudianteUseCase.createPractica(practicaDTO, estudianteId))
-                .withMessage("Estudiante creado")
+                .withMessage("Práctica creada")
                 .build());
     }
 }

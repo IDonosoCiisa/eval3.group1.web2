@@ -23,9 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin/**").authenticated()
-                        .requestMatchers("/api/profesores/**").authenticated()
-                        .requestMatchers("/api/estudiantes/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/profesores/**").hasRole("PROFESOR")
+                        .requestMatchers("/api/estudiantes/**").hasRole("ESTUDIANTE")
                 )
                 .httpBasic(withDefaults());
         return http.build();

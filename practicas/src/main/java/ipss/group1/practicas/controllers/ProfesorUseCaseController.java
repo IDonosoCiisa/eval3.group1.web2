@@ -42,7 +42,7 @@ public class ProfesorUseCaseController {
         return ResponseEntity.ok().body(
                 ResponseFormatLists.ResponseFormatListsBuilder.aResponseFormatLists()
                         .withData(profesorUseCase.getPracticasByEstudianteId(estudianteId))
-                        .withMessage("Listado prácticas para id: " + estudianteId).build());
+                        .withMessage("Listado prácticas para estudiante id: " + estudianteId).build());
     }
 
 
