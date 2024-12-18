@@ -1,5 +1,11 @@
 package ipss.group1.practicas.services.usecases;
 
+import ipss.group1.practicas.models.Empresa;
+import ipss.group1.practicas.models.Estudiante;
+import ipss.group1.practicas.models.Tutor;
+import ipss.group1.practicas.repositories.EmpresaRepository;
+import ipss.group1.practicas.repositories.EstudianteRepository;
+import ipss.group1.practicas.repositories.TutorRepository;
 import ipss.group1.practicas.services.dtos.PracticaDTO;
 import ipss.group1.practicas.models.Practica;
 import ipss.group1.practicas.repositories.PracticaRepository;
@@ -12,9 +18,15 @@ import java.util.stream.Collectors;
 @Service
 public class ProfesorUseCase {
     private final PracticaRepository practicaRepository;
+    private final EstudianteRepository estudianteRepository;
+    private final TutorRepository tutorRepository;
+    private final EmpresaRepository empresaRepository;
 
-    public ProfesorUseCase(PracticaRepository practicaRepository) {
+    public ProfesorUseCase(PracticaRepository practicaRepository, EstudianteRepository estudianteRepository, TutorRepository tutorRepository, EmpresaRepository empresaRepository) {
         this.practicaRepository = practicaRepository;
+        this.estudianteRepository = estudianteRepository;
+        this.tutorRepository = tutorRepository;
+        this.empresaRepository = empresaRepository;
     }
 
     public List<PracticaDTO> getAllPracticas() {
@@ -36,8 +48,17 @@ public class ProfesorUseCase {
     }
 
     public PracticaDTO createPractica(Practica practica) {
-        Practica savedPractica = practicaRepository.save(practica);
-        return convertToDTO(savedPractica);
+        Empresa empresa = empresaRepository.findById(practica.getEmpresa().getId()).orElse(null);
+        Tutor tutor = tutorRepository.findById(practica.getTutor().getId()).orElse(null);
+        Estudiante estudiante = estudianteRepository.findById(practica.getEstudiante().getId()).orElse(null);
+        return convertToDTO(practicaRepository.save(
+                Practica.PracticaBuilder.aPractica()
+                        .withDescripcion(practica.getDescripcion())
+                        .withEstudiante(estudiante)
+                        .withTutor(tutor)
+                        .withEmpresa(empresa)
+                        .build())
+        );
     }
 
     public Optional<PracticaDTO> updatePractica(Long id, Practica practica) {

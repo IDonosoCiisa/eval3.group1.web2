@@ -54,12 +54,11 @@ public class PracticaService {
     }
 
     private PracticaDTO convertToDTO(Practica practica) {
-        PracticaDTO dto = new PracticaDTO();
-        dto.setId(practica.getId());
-        dto.setDescripcion(practica.getDescripcion());
-        dto.setEstudianteId(practica.getEstudiante().getId());
-        dto.setTutorId(practica.getTutor().getId());
-        dto.setEmpresaId(practica.getEmpresa().getId());
-        return dto;
+        return PracticaDTO.PracticaDTOBuilder.aPracticaDTO()
+                .withDescripcion(practica.getDescripcion())
+                .withEmpresaId(practica.getEmpresa().getId())
+                .withEstudianteId(practica.getEstudiante().getId())
+                .withTutorId(practica.getTutor().getId())
+                .withId(practica.getId()).build();
     }
 }

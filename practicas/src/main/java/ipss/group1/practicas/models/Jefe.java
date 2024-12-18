@@ -9,7 +9,7 @@ public class Jefe {
     private Long id;
     private String nombre;
 
-    @OneToOne(mappedBy = "jefe")
+    @OneToOne(mappedBy = "jefe", cascade = CascadeType.ALL)
     private Empresa empresa;
 
     public Jefe() {

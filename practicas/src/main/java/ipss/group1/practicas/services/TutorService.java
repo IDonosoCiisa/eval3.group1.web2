@@ -53,9 +53,9 @@ public class TutorService {
     }
 
     private TutorDTO convertToDTO(Tutor tutor) {
-        TutorDTO dto = new TutorDTO();
-        dto.setId(tutor.getId());
-        dto.setNombre(tutor.getNombre());
-        return dto;
+        return TutorDTO.TutorDTOBuilder.aTutorDTO()
+                .withId(tutor.getId())
+                .withNombre(tutor.getNombre())
+                .build();
     }
 }

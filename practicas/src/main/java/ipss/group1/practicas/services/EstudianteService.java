@@ -53,9 +53,9 @@ public class EstudianteService {
     }
 
     private EstudianteDTO convertToDTO(Estudiante estudiante) {
-        EstudianteDTO dto = new EstudianteDTO();
-        dto.setId(estudiante.getId());
-        dto.setNombre(estudiante.getNombre());
-        return dto;
+        return EstudianteDTO.EstudianteDTOBuilder.anEstudianteDTO()
+                .withId(estudiante.getId())
+                .withNombre(estudiante.getNombre())
+                .build();
     }
 }

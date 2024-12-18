@@ -1,5 +1,6 @@
 package ipss.group1.practicas.controllers.mantainer;
 
+import ipss.group1.practicas.controllers.response.ResponseFormatLists;
 import ipss.group1.practicas.services.dtos.EstudianteDTO;
 import ipss.group1.practicas.models.Estudiante;
 import ipss.group1.practicas.services.EstudianteService;
@@ -18,8 +19,10 @@ public class EstudianteController {
     }
 
     @GetMapping
-    public List<EstudianteDTO> getAllEstudiantes() {
-        return estudianteService.getAllEstudiantes();
+    public ResponseFormatLists getAllEstudiantes() {
+        return ResponseFormatLists.ResponseFormatListsBuilder.aResponseFormatLists()
+                .withData(estudianteService.getAllEstudiantes())
+                .withMessage("Listado Estudiantes").build();
     }
 
     @GetMapping("/{id}")

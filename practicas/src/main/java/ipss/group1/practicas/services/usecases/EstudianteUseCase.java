@@ -1,5 +1,10 @@
 package ipss.group1.practicas.services.usecases;
 
+import ipss.group1.practicas.models.Empresa;
+import ipss.group1.practicas.models.Estudiante;
+import ipss.group1.practicas.models.Tutor;
+import ipss.group1.practicas.repositories.EmpresaRepository;
+import ipss.group1.practicas.repositories.TutorRepository;
 import ipss.group1.practicas.services.dtos.PracticaDTO;
 import ipss.group1.practicas.models.Practica;
 import ipss.group1.practicas.repositories.EstudianteRepository;
@@ -13,10 +18,14 @@ import java.util.stream.Collectors;
 public class EstudianteUseCase {
     private final PracticaRepository practicaRepository;
     private final EstudianteRepository estudianteRepository;
+    private final TutorRepository tutorRepository;
+    private final EmpresaRepository empresaRepository;
 
-    public EstudianteUseCase(PracticaRepository practicaRepository, EstudianteRepository estudianteRepository) {
+    public EstudianteUseCase(PracticaRepository practicaRepository, EstudianteRepository estudianteRepository, TutorRepository tutorRepository, EmpresaRepository empresaRepository) {
         this.practicaRepository = practicaRepository;
         this.estudianteRepository = estudianteRepository;
+        this.tutorRepository = tutorRepository;
+        this.empresaRepository = empresaRepository;
     }
 
     public List<PracticaDTO> getPracticasByEstudianteId(Long estudianteId) {
@@ -27,11 +36,15 @@ public class EstudianteUseCase {
     }
 
     public PracticaDTO createPractica(PracticaDTO practicaDTO, Long estudianteId) {
-        Practica practica = new Practica();
-        practica.setDescripcion(practicaDTO.getDescripcion());
-        estudianteRepository.findById(estudianteId).ifPresent(practica::setEstudiante);
-        practicaRepository.save(practica);
-        return convertToDTO(practica);
+        Estudiante estudiante = estudianteRepository.findById(estudianteId).orElse(null);
+        Tutor tutor = tutorRepository.findById(practicaDTO.getTutorId()).orElse(null);
+        Empresa empresa = empresaRepository.findById(practicaDTO.getEmpresaId()).orElse(null);
+        return convertToDTO(practicaRepository.save(Practica.PracticaBuilder.aPractica()
+                .withDescripcion(practicaDTO.getDescripcion())
+                .withEstudiante(estudiante)
+                .withTutor(tutor)
+                .withEmpresa(empresa)
+                .build()));
     }
 
     private PracticaDTO convertToDTO(Practica practica) {

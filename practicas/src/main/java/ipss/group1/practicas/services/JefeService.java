@@ -53,9 +53,9 @@ public class JefeService {
     }
 
     private JefeDTO convertToDTO(Jefe jefe) {
-        JefeDTO dto = new JefeDTO();
-        dto.setId(jefe.getId());
-        dto.setNombre(jefe.getNombre());
-        return dto;
+        return JefeDTO.JefeDTOBuilder.aJefeDTO()
+                .withId(jefe.getId())
+                .withNombre(jefe.getNombre())
+                .build();
     }
 }
